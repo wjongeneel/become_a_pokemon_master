@@ -63,7 +63,9 @@ class Pokemon:
 
 class Trainer:
     def __init__(self, pokemon_list, name, number_of_potions, current_active_pokemon):
+        pass
 
 charmander = Pokemon("Charmander", 100, "Fire", 100, 100, False)
 bulbasaur = Pokemon("Bulbasaur", 100, "Grass", 100, 100, False)
 bulbasaur.attack(charmander)
+charmander.attack(bulbasaur)
