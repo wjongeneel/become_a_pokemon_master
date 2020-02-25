@@ -21,7 +21,6 @@ class Pokemon:
 
 
     def add_health(self, amount):
-        #self.current_hp += amount
         if self.current_hp + amount >= self.max_hp:
             amount = self.max_hp - self.current_hp
             self.current_hp = self.max_hp
@@ -41,7 +40,7 @@ class Pokemon:
 
 
     def attack(self, pokemon):
-        if pokemon.is_knocked_out == False:
+        if (pokemon.is_knocked_out == False) and (self.is_knocked_out == False):
             base_damage = self.level
             # the statements below check whether the attacking pokemon has an attacking advantage or disadvantage
             if self.type == "Fire" and pokemon.type == "Grass":
@@ -64,6 +63,8 @@ class Pokemon:
                 damage = base_damage * 0.5
             print("{self_name} attacks {pokemon_name}!".format(self_name = self.name, pokemon_name = pokemon.name))
             pokemon.lose_health(damage)
+        elif (pokemon.is_knocked_out == False) and (self.is_knocked_out == True):
+            print("{self_name} cannot attack {pokemon_name}, because {self_name} is knocked out!".format(self_name = self.name, pokemon_name = pokemon.name))
         else:
             print("{self_name} attacks {pokemon_name}!".format(self_name = self.name, pokemon_name = pokemon.name))
             print("You cannot attack a pokemon that has been knocked out!")
