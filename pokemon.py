@@ -10,7 +10,7 @@ class Pokemon:
 
 
     def lose_health(self, amount):
-        if amount > self.current_hp: # Condition that checks if the amount of damage is greater than the current_hp, if so, amount is current_hp
+        if amount >= self.current_hp: # Condition that checks if the amount of damage is greater than the current_hp, if so, amount is current_hp
             amount = self.current_hp
             self.current_hp -= amount
             print("{name} has lost {amount} HP and now has {current_hp} HP".format(name = self.name, amount = amount, current_hp = self.current_hp))
@@ -43,6 +43,7 @@ class Pokemon:
     def attack(self, pokemon):
         if pokemon.is_knocked_out == False:
             base_damage = self.level
+            # the statements below check whether the attacking pokemon has an attacking advantage or disadvantage
             if self.type == "Fire" and pokemon.type == "Grass":
                 damage = base_damage * 2
             elif self.type == "Fire" and pokemon.type == "Water":
@@ -73,14 +74,33 @@ class Trainer:
         self.pokemon_list = pokemon_list
         self.name = name
         self.number_of_potions = number_of_potions
-        self.current_active_pokemon = current_active_pokemon
+        self.current_active_pokemon = pokemon_list[0]
 
 
-    #def
+    def use_potion(self):
+        self.current_active_pokemon.add_health(50)
+        print("{trainer_name} uses a potion on {pokemon_name}.".format(trainer_name = self.name, pokemon_name = self.current_active_pokemon.name))
 
-charmander = Pokemon("Charmander", 40, "Fire", 100, 100, False)
-bulbasaur = Pokemon("Bulbasaur", 100, "Grass", 100, 100, False)
-bulbasaur.attack(charmander)
-charmander.attack(bulbasaur)
-charmander.attack(bulbasaur)
-charmander.attack(bulbasaur)
+
+    def attack_trainer(self, trainer):
+        self.current_active_pokemon.attack(trainer.current_active_pokemon)
+
+
+    def switch_pokemon(self, pokemon_name):
+        pokemon_exists = False
+        for i in range(0, len(self.pokemon_list)):
+            if (pokemon_name == self.current_active_pokemon.name):
+                print("{trainer_name} tries to switch to {pokemon}, but failed. {pokemon} is already active!".format(trainer_name = self.name, pokemon = pokemon_name))
+                pokemon_exists = True
+                break
+            elif (pokemon_name == self.pokemon_list[i].name) and (self.pokemon_list[i].is_knocked_out !=True):
+                self.current_active_pokemon = self.pokemon_list[i]
+                print("{trainer_name} switches pokemon to {pokemon}!".format(trainer_name = self.name, pokemon = self.current_active_pokemon.name))
+                pokemon_exists = True
+                break
+            elif (pokemon_name == self.pokemon_list[i].name) and (self.pokemon_list[i].is_knocked_out == True):
+                print("{trainer_name} tries to switch to {pokemon}, but failed. You cannot switch to knocked out pokemon!".format(trainer_name = self.name, pokemon = self.pokemon_list[i].name))
+                pokemon_exitst = True
+                break
+        if pokemon_exists == False:
+            print("{trainer_name} tries to switch to {pokemon}, but failed. There is no pokemon with that name in the pokemon list".format(trainer_name = self.name, pokemon = pokemon_name))
